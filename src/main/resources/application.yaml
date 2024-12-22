@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: web-finance
+  datasource:
+    username: postgres
+    password: 256545
+    url: jdbc:postgresql://localhost:5432/DB_WEB-FINANCE_DEV
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    user: postgres
+    password: 256545
+    schemas: public
