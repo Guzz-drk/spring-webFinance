@@ -18,8 +18,10 @@ public class BuilderUser {
 
     public UserDTO toDTO(User user){
         return UserDTO.builder()
+                .id(user.getId())
                 .name(user.getName())
                 .mail(user.getMail())
+                .active(user.isActive())
                 .build();
     }
 

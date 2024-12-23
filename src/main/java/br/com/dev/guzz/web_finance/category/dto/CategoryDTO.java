@@ -1,4 +1,4 @@
-package br.com.dev.guzz.web_finance.user.dto;
+package br.com.dev.guzz.web_finance.category.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -10,16 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class UserDTO {
+public class CategoryDTO {
 
     private Long id;
 
     private String name;
 
-    private String mail;
-
-    private String password;
-
     private boolean active;
+
 }
