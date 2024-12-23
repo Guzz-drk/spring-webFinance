@@ -1,2 +1,0 @@
-#1 config : Adicionada tratativa para conexão ao PostgreSQL,
-realizada configuração inicial do application.yaml, e configurado Flyway.
