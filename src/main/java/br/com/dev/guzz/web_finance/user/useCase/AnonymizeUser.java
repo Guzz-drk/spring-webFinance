@@ -1,15 +1,14 @@
 package br.com.dev.guzz.web_finance.user.useCase;
 
-import br.com.dev.guzz.web_finance.user.dto.UserDTO;
 import br.com.dev.guzz.web_finance.user.entity.User;
 import br.com.dev.guzz.web_finance.user.repository.UserRepository;
-import br.com.dev.guzz.web_finance.user.util.BuilderUser;
 import br.com.dev.guzz.web_finance.user.util.ValidateUser;
+import br.com.dev.guzz.web_finance.util.RandomStringValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UpdateUser {
+public class AnonymizeUser {
 
     @Autowired
     private UserRepository repository;
@@ -18,16 +17,20 @@ public class UpdateUser {
     private ValidateUser validateUser;
 
     @Autowired
-    private BuilderUser builderUser;
+    private RandomStringValue random;
 
-    public UserDTO invoke(UserDTO userDTO) throws Exception {
-        User user = validateUser.invoke(userDTO.getId());
+    public void invoke(Long id) throws Exception {
+        User user = validateUser.invoke(id);
 
-        user.setName(userDTO.getName());
-        user.setMail(userDTO.getMail());
-
-        repository.saveAndFlush(user);
-        return builderUser.toDTO(user);
+        anonymizeUser(user);
     }
 
+    private void anonymizeUser(User user){
+        user.setMail(random.maskLength10());
+        user.setName(random.maskLength10());
+        user.setPassword("");
+        user.setActive(false);
+
+        repository.saveAndFlush(user);
+    }
 }

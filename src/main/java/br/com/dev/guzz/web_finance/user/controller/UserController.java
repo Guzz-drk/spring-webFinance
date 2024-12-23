@@ -2,10 +2,7 @@ package br.com.dev.guzz.web_finance.user.controller;
 
 import br.com.dev.guzz.web_finance.user.dto.UserDTO;
 import br.com.dev.guzz.web_finance.user.entity.User;
-import br.com.dev.guzz.web_finance.user.useCase.CreateUser;
-import br.com.dev.guzz.web_finance.user.useCase.GetUser;
-import br.com.dev.guzz.web_finance.user.useCase.InactivateUser;
-import br.com.dev.guzz.web_finance.user.useCase.UpdateUser;
+import br.com.dev.guzz.web_finance.user.useCase.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +17,16 @@ public class UserController {
     private CreateUser createUser;
 
     @Autowired
-    private InactivateUser inactivateUser;
+    private AnonymizeUser anonymizeUser;
 
     @Autowired
     private GetUser getUser;
 
     @Autowired
     private UpdateUser updateUser;
+
+    @Autowired
+    private InactivateUser inactivateUser;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody UserDTO userDTO){
@@ -39,10 +39,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/anonymize/{id}")
-    public ResponseEntity<?> anonymize(@PathVariable(name = "id") Long id){
+    @PutMapping("/anonymize")
+    public ResponseEntity<?> anonymize(@RequestHeader Long id){
         try {
-            inactivateUser.invoke(id);
+            anonymizeUser.invoke(id);
             return ResponseEntity.status(200).build();
         } catch (Exception e){
             log.warn("=== Error while anonymize user. {}", e.getMessage());
@@ -61,13 +61,24 @@ public class UserController {
         }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") Long id, @RequestBody UserDTO userDTO){
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody UserDTO userDTO){
         try {
-            UserDTO user = updateUser.invoke(id, userDTO);
+            UserDTO user = updateUser.invoke(userDTO);
             return ResponseEntity.status(200).body(user);
         } catch (Exception e){
             log.warn("=== Error while updating user. {}", e.getMessage());
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/inactivate")
+    public ResponseEntity<?> inactivate(@RequestHeader Long id){
+        try {
+            inactivateUser.invoke(id);
+            return ResponseEntity.status(200).build();
+        } catch (Exception e){
+            log.warn("=== Error while inactivating user. {}", e.getMessage());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

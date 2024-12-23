@@ -1,0 +1,1 @@
+#6 category : Criação da tabela e processos de CRUD, ajustado alguns pontos nos processos de usuário.
