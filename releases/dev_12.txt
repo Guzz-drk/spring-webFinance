@@ -1,1 +1,0 @@
-#12 users : Adicionado novo endpoint para buscar os usuários ativos.
