@@ -1,0 +1,1 @@
+#13 categories : Adicionado novo endpoint para buscar todas as categorias ativas.
