@@ -1,0 +1,1 @@
+ALTER TABLE transactions ALTER COLUMN price TYPE numeric(10,2);
