@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private GetUser getUser;
+
+    @Autowired
+    private GetAllUsers getAllUsers;
 
     @Autowired
     private UpdateUser updateUser;
@@ -57,6 +62,17 @@ public class UserController {
             return ResponseEntity.status(200).body(user);
         } catch (Exception e){
             log.warn("=== Error while finding user. {}", e.getMessage());
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> findAll(){
+        try {
+            List<UserDTO> users = getAllUsers.invoke();
+            return ResponseEntity.status(200).body(users);
+        } catch (Exception e){
+            log.warn("=== Error while finding all users. {}", e.getMessage());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

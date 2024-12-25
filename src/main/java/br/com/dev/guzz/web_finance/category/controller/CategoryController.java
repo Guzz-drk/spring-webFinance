@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/category")
 @Slf4j
@@ -18,6 +20,9 @@ public class CategoryController {
 
     @Autowired
     private GetCategory getCategory;
+
+    @Autowired
+    private GetAllCategories getAllCategories;
 
     @Autowired
     private UpdateCategory updateCategory;
@@ -46,6 +51,17 @@ public class CategoryController {
             return ResponseEntity.status(200).body(category);
         } catch (Exception e){
             log.warn("=== Error while finding category. {}", e.getMessage());
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> findAll(){
+        try {
+            List<CategoryDTO> categories = getAllCategories.invoke();
+            return ResponseEntity.status(200).body(categories);
+        } catch (Exception e){
+            log.warn("=== Error while finding all categories. {}", e.getMessage());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
