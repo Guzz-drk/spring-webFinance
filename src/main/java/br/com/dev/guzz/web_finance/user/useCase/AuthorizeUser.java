@@ -23,6 +23,8 @@ public class AuthorizeUser {
 
         if(!user.getPassword().equals(authorizeDTO.getPassword())) throw new Exception("Mail or Password incorrect");
 
+        authorizeDTO.setName(user.getName());
+        //TODO switch to jwt
         authorizeDTO.setAuthenticated(true);
 
         return authorizeDTO;

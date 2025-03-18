@@ -16,4 +16,5 @@ public class AuthorizeDTO {
     private String mail;
     private String password;
     private boolean authenticated;
+    private String name;
 }
