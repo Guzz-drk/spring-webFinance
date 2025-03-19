@@ -17,4 +17,5 @@ public class AuthorizeDTO {
     private String password;
     private boolean authenticated;
     private String name;
+    private String token;
 }

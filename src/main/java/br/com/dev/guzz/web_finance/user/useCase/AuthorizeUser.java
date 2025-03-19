@@ -1,12 +1,13 @@
 package br.com.dev.guzz.web_finance.user.useCase;
 
+import br.com.dev.guzz.web_finance.infra.config.TokenService;
 import br.com.dev.guzz.web_finance.user.dto.AuthorizeDTO;
 import br.com.dev.guzz.web_finance.user.entity.User;
 import br.com.dev.guzz.web_finance.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthorizeUser {
@@ -14,17 +15,22 @@ public class AuthorizeUser {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenService tokenService;
+
     public AuthorizeDTO invoke(AuthorizeDTO authorizeDTO) throws Exception {
-        Optional<User> optionalUser = repository.findByMail(authorizeDTO.getMail());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(authorizeDTO.getMail(), authorizeDTO.getPassword());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        if(optionalUser.isEmpty()) throw new Exception("Mail or Password incorrect");
+        User userAuthenticated = (User) auth.getPrincipal();
+        String token = tokenService.generateToken(userAuthenticated);
 
-        User user = optionalUser.get();
-
-        if(!user.getPassword().equals(authorizeDTO.getPassword())) throw new Exception("Mail or Password incorrect");
-
-        authorizeDTO.setName(user.getName());
-        //TODO switch to jwt
+        authorizeDTO.setName(userAuthenticated.getName());
+        authorizeDTO.setPassword(null);
+        authorizeDTO.setToken(token);
         authorizeDTO.setAuthenticated(true);
 
         return authorizeDTO;
