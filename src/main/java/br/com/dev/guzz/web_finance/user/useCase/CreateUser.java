@@ -5,6 +5,7 @@ import br.com.dev.guzz.web_finance.user.entity.User;
 import br.com.dev.guzz.web_finance.user.repository.UserRepository;
 import br.com.dev.guzz.web_finance.user.util.BuilderUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,10 @@ public class CreateUser {
     private BuilderUser builderUser;
 
     public UserDTO invoke(UserDTO userDTO){
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.getPassword());
+        userDTO.setPassword(encryptedPassword);
+
         User user = builderUser.toEntity(userDTO);
         user = repository.save(user);
 
