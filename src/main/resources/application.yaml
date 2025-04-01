@@ -12,3 +12,8 @@ spring:
     user: postgres
     password: 256545
     schemas: public
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:WEBFINANCE}
+      issuer: WEB-FINANCE

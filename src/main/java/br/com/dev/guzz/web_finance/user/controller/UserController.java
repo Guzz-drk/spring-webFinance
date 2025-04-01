@@ -1,5 +1,6 @@
 package br.com.dev.guzz.web_finance.user.controller;
 
+import br.com.dev.guzz.web_finance.user.dto.AuthorizeDTO;
 import br.com.dev.guzz.web_finance.user.dto.UserDTO;
 import br.com.dev.guzz.web_finance.user.entity.User;
 import br.com.dev.guzz.web_finance.user.useCase.*;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private InactivateUser inactivateUser;
+
+    @Autowired
+    private AuthorizeUser authorizeUser;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody UserDTO userDTO){
@@ -95,6 +99,17 @@ public class UserController {
             return ResponseEntity.status(200).build();
         } catch (Exception e){
             log.warn("=== Error while inactivating user. {}", e.getMessage());
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/authorize")
+    public ResponseEntity<?> authorize(@RequestBody AuthorizeDTO authorizeDTO){
+        try {
+            AuthorizeDTO authorized = authorizeUser.invoke(authorizeDTO);
+            return ResponseEntity.status(200).body(authorized);
+        } catch (Exception e){
+            log.warn("=== Error while authorizing user. {}", e.getMessage());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

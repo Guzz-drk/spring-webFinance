@@ -42,6 +42,7 @@ public class Transaction {
 
     private BigDecimal price;
 
+    @Column(columnDefinition = "boolean default true")
     private boolean active;
 
     @CreationTimestamp
