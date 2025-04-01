@@ -1,0 +1,1 @@
+#21 statistics : implemented method for save the called ws.
