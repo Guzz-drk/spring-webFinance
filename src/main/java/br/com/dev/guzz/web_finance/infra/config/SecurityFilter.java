@@ -31,13 +31,13 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (!StringHelper.isNullOrEmpty(token)) {
             String login = tokenService.validateToken(token);
 
-            if (StringHelper.isNullOrEmpty(login)) return;
+            if (!StringHelper.isNullOrEmpty(login)) {
+                UserDetails userDetails = userRepository.findByMail(login);
 
-            UserDetails userDetails = userRepository.findByMail(login);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(request, response);
     }
